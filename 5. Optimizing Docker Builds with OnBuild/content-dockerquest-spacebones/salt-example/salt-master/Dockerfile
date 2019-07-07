@@ -14,9 +14,9 @@ RUN apt-get -y update && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/
 
-RUN chmod +x \
+ONBUILD RUN chmod +x \
 	/docker-entrypoint.sh
 
 EXPOSE 4505 4506
 
-CMD /docker-entrypoint.sh
+ONBUILD CMD /docker-entrypoint.sh
