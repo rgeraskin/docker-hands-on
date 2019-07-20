@@ -1,0 +1,29 @@
+version: "3.2"
+services:
+  weather-app1:
+    tty: true
+    build: ./weather-app/
+    networks:
+      - frontend
+  weather-app2:
+    tty: true
+    build: ./weather-app/
+    networks:
+      - frontend
+  weather-app3:
+    tty: true
+    build: ./weather-app/
+    networks:
+      - frontend
+
+  loadbalancer:
+    image: nginx
+    tty: true
+    build: ./load-balancer/
+    networks:
+      - frontend
+    ports:
+      - "80:80"
+
+networks:
+  frontend:
