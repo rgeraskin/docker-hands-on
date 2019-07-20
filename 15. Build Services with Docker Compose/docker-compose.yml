@@ -1,0 +1,29 @@
+version: "3"
+services:
+  ghost:
+    container_name: ghost-blog
+    image: ghost:1-alpine
+    restart: always
+    ports:
+      - 80:2368
+    volumes:
+      - ghost-volume:/var/lib/ghost
+    environment:
+      database__client: mysql
+      database__connection__host: mysql
+      database__connection__user: root
+      database__connection__password: P4sSw0rd0!
+      database__connection__database: ghost
+    depends_on:
+      - mysql
+  mysql:
+    container_name: ghost-db
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: P4sSw0rd0!
+volumes:
+  ghost-volume:
+  mysql-volume: 
