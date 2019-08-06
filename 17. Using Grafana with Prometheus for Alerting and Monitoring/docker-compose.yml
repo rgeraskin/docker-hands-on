@@ -21,3 +21,23 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+  pushgateway:
+    image: prom/pushgateway
+    container_name: pushgateway
+    ports:
+      - 9091:9091
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - 9100:9100
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    depends_on:
+      - prometheus
+      - cadvisor

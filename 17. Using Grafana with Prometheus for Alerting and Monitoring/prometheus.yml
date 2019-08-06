@@ -1,6 +1,14 @@
 scrape_configs:
-- job_name: cadvisor
-  scrape_interval: 5s
-  static_configs:
-  - targets:
-    - cadvisor:8080
+  - job_name: prometheus
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - cadvisor:8080
+          - prometheus:9090
+          - node-exporter:9100
+          - pushgateway:9091
+  - job_name: docker
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - 10.0.1.236:9323
