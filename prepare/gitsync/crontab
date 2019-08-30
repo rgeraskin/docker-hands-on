@@ -1,0 +1,6 @@
+*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/AaaManager /git_mirror/AaaManager git@gitlab:inetcore/aaamanager.git > /proc/1/fd/1 2>/proc/1/fd/2
+*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/DNM /git_mirror/DNM git@gitlab:inetcore/dnm.git > /proc/1/fd/1 2>/proc/1/fd/2
+#*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/DNM_Node /git_mirror/DNM_Node git@gitlab:inetcore/dnm_node.git > /proc/1/fd/1 2>/proc/1/fd/2
+*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/Fixdevtests /git_mirror/Fixdevtests git@gitlab:inetcore/fixdevtests.git > /proc/1/fd/1 2>/proc/1/fd/2
+#*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/Inetcor /git_mirror/Inetcor git@gitlab:inetcore/inetcor.git > /proc/1/fd/1 2>/proc/1/fd/2
+#*/1 * * * * /usr/local/bin/gitsync create_sync ssh://mskgit/tentacle /git_mirror/tentacle git@gitlab:inetcore/tentacle.git > /proc/1/fd/1 2>/proc/1/fd/2

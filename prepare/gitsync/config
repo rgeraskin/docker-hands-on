@@ -1,0 +1,4 @@
+Host mskgit
+    User git
+    Hostname 0001git01.msk.mts.ru
+    StrictHostKeyChecking no
