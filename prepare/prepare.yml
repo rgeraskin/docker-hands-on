@@ -1,0 +1,86 @@
+---
+# ansible itself is in ol7_developer_EPEL repository
+# or yum install python2-pip && pip install --trusted-host pypi.org ansible docker
+
+- hosts: all
+  become: yes
+  vars_files:
+    - secret
+  tasks:
+    # - name: install the latest version of docker-engine from the ol7_addons repo
+    #   yum:
+    #     name: docker-engine
+    #     enablerepo: ol7_addons
+    #     state: present
+    #   environment: "{{ proxy_env }}"
+
+    # - name: install the latest version of docker-compose
+    #   yum:
+    #     name: docker-compose
+    #     state: present
+    #   environment: "{{ proxy_env }}"
+
+    # check if needed
+    # - name: enable dynamic ca configuration on rhel6
+    # shell: /bin/update-ca-trust enable
+    # when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int == 6
+
+    # - name: copy infowatch cert to trusted ca
+    #   copy:
+    #     src: infowatch.crt
+    #     dest: /etc/pki/ca-trust/source/anchors/
+    #     owner: root
+    #     group: root
+    #     mode: 0644
+    #   notify:
+    #     - update trusted ca
+
+    - name: add proxy settings to docker config
+      lineinfile:
+        path: /etc/sysconfig/docker
+        line: http_proxy="{{ proxy_env.http_proxy }}"
+        state: present
+
+    - name: start and enable docker
+      service:
+        name: docker
+        state: restarted
+        enabled: yes
+      environment: "{{proxy_env}}"
+      notify:
+        - remove proxy settings from docker config
+
+    # - name: build Gitsync image
+    #   docker_image:
+    #     build:
+    #       path: /home/user/prepare/gitsync
+    #       use_config_proxy: yes
+    #     name: gitsync
+    #     state: present
+    #     source: build
+    #   environment:
+    #     DOCKER_CONFIG: /home/user/prepare/gitsync
+
+    # - name: check Gitsync work dir exists
+    #   file:
+    #     path: /srv/gitlab/gitsync/
+    #     state: directory
+
+    # - name: copy Gitsync crontab to Gitsync work dir
+    #   copy:
+    #     src: gitsync/crontab
+    #     dest: /srv/gitlab/gitsync/crontab
+    #     owner: root
+    #     group: root
+    #     mode: 0644
+  handlers:
+    - name: update trusted ca
+      shell: update-ca-trust
+    - name: remove proxy settings from docker config
+      lineinfile:
+        path: /etc/sysconfig/docker
+        line: http_proxy="{{ proxy_env.http_proxy }}"
+        state: absent
+...
+#  sudo docker run --rm -v /home/user/prepare/docker/crontab:/etc/cron.d/crontab -v /home/user/prepare/docker/git_mirror:/git_mirror:rw ubu
+# docker run --rm -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register --non-interactive --executor "docker" --docker-image bitnami/ruby:2.3-ol-7 --url "http://<IP:PORT>/" --registration-token "PROJECT_REGISTRATION_TOKEN" --description "inetcore-runner" --tag-list "docker,inetcore" --run-untagged="true" --locked="false" --access-level="not_protected"

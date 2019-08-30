@@ -1,0 +1,38 @@
+version: "3"
+services:
+  gitsync:
+    container_name: gitsync
+    image: gitsync:latest
+    restart: always
+    volumes:
+      - /srv/gitlab/gitsync/crontab:/etc/cron.d/crontab
+      - /srv/gitlab/gitsync/git_mirror:/git_mirror
+    depends_on:
+      - gitlab
+  gitlab_runner:
+    container_name: gitlab_runner
+    image: gitlab/gitlab-runner:latest
+    restart: always
+    volumes:
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - gitlab
+  gitlab:
+    container_name: gitlab
+    image: gitlab/gitlab-ce:latest
+    hostname: gitlab
+    restart: always
+    ports:
+      - 443:443
+      - 10.41.186.2:8888:80
+      - 22:22
+    volumes:
+      - /srv/gitlab/config:/etc/gitlab
+      - /srv/gitlab/logs:/var/log/gitlab
+      - /srv/gitlab/data:/var/opt/gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.local/'
+        # unicorn['worker_processes'] = 2
+        # unicorn['worker_timeout'] = 120
